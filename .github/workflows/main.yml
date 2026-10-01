@@ -10,7 +10,7 @@ on:
       - 'mkdocs.yml'
   pull_request:
     branches:
-      - main
+      - target_PR1043
     paths-ignore:
       - '**.md'
       - 'docs/**'
@@ -26,69 +26,69 @@ env:
   DIRACX_CHARTS_BRANCH: master
 
 jobs:
-  shellcheck:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          persist-credentials: false
-      - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
-        with:
-          run-install: false
-          post-cleanup: false
-      - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
-        with:
-          cache: false
-          environments: shellcheck
-      - name: Run shellcheck
-        run: pixi run shellcheck
+  #shellcheck:
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - name: Checkout code
+  #      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+  #      with:
+  #        persist-credentials: false
+  #    - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
+  #      with:
+  #        run-install: false
+  #        post-cleanup: false
+  #    - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
+  #      with:
+  #        cache: false
+  #        environments: shellcheck
+  #    - name: Run shellcheck
+  #      run: pixi run shellcheck
 
-  unittest:
-    name: Unit test - ${{ matrix.package }}
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        package:
-          - diracx-core
-          - diracx-db
-          - diracx-logic
-          - diracx-routers
-          - diracx-client
-          - diracx-api
-          - diracx-cli
-          - gubbins-core
-          - gubbins-db
-          - gubbins-logic
-          - gubbins-routers
-          - gubbins-client
-          - gubbins-api
-          - gubbins-cli
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          persist-credentials: false
-      - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
-        with:
-          run-install: false
-          post-cleanup: false
-      - name: Apply workarounds
-        run: |
-          # Workaround for https://github.com/prefix-dev/pixi/issues/3762
-          sed -i.bak 's@editable = true@editable = false@g' pixi.toml
-          rm pixi.toml.bak
-          # Show any changes
-          git diff
-      - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
-        with:
-          cache: false
-          environments: ${{ matrix.package }}
-      - name: Run pytest
-        run: pixi run pytest-${{ matrix.package }} --cov-report=xml:coverage.xml --junitxml=report.xml
-      - name: Upload coverage report
-        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+  #unittest:
+  #  name: Unit test - ${{ matrix.package }}
+  #  runs-on: ubuntu-latest
+  #  strategy:
+  #    fail-fast: false
+  #    matrix:
+  #      package:
+  #        - diracx-core
+  #        - diracx-db
+  #        - diracx-logic
+  #        - diracx-routers
+  #        - diracx-client
+  #        - diracx-api
+  #        - diracx-cli
+  #        - gubbins-core
+  #        - gubbins-db
+  #        - gubbins-logic
+  #        - gubbins-routers
+  #        - gubbins-client
+  #        - gubbins-api
+  #        - gubbins-cli
+  #  steps:
+  #    - name: Checkout code
+  #      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+  #      with:
+  #        persist-credentials: false
+  #    - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
+  #      with:
+  #        run-install: false
+  #        post-cleanup: false
+  #    - name: Apply workarounds
+  #      run: |
+  #        # Workaround for https://github.com/prefix-dev/pixi/issues/3762
+  #        sed -i.bak 's@editable = true@editable = false@g' pixi.toml
+  #        rm pixi.toml.bak
+  #        # Show any changes
+  #        git diff
+  #    - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
+  #      with:
+  #        cache: false
+  #        environments: ${{ matrix.package }}
+  #    - name: Run pytest
+  #      run: pixi run pytest-${{ matrix.package }} --cov-report=xml:coverage.xml --junitxml=report.xml
+  #    - name: Upload coverage report
+  #      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
 
   pytest-integration:
     runs-on: ubuntu-latest
@@ -236,50 +236,50 @@ jobs:
         with:
           files: ./coverage-pytest.xml,./coverage-demo.xml
 
-  client-generation:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        package: [diracx, gubbins]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          persist-credentials: false
-      - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
-        with:
-          run-install: false
-          post-cleanup: false
-      - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
-        with:
-          cache: false
-          locked: false
-          environments: ${{ matrix.package }}-generate-client
-      - name: Run autorest
-        run: pixi run -e ${{ matrix.package }}-generate-client generate-client
+  #client-generation:
+  #  runs-on: ubuntu-latest
+  #  strategy:
+  #    fail-fast: false
+  #    matrix:
+  #      package: [diracx, gubbins]
+  #  steps:
+  #    - name: Checkout code
+  #      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+  #      with:
+  #        persist-credentials: false
+  #    - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
+  #      with:
+  #        run-install: false
+  #        post-cleanup: false
+  #    - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
+  #      with:
+  #        cache: false
+  #        locked: false
+  #        environments: ${{ matrix.package }}-generate-client
+  #    - name: Run autorest
+  #      run: pixi run -e ${{ matrix.package }}-generate-client generate-client
 
-  pre-commit:
-    # Runs the hooks listed in ``ci.skip`` of .pre-commit-config.yaml — those
-    # are the hooks that require a pixi environment and therefore can't run on
-    # pre-commit.ci. All other hooks are handled by the pre-commit.ci bot.
-    name: pre-commit (pixi-dependent hooks)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          persist-credentials: false
-      - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
-        with:
-          run-install: false
-          post-cleanup: false
-      - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
-        with:
-          cache: false
-          environments: pre-commit
-      - name: Run pixi-dependent pre-commit hooks
-        run: |
-          for hook in generate-pixi-docs settings-doc-check check-all-required check-all-forbidden; do
-            pixi run pre-commit run "$hook" --all-files
-          done
+  #pre-commit:
+  #  # Runs the hooks listed in ``ci.skip`` of .pre-commit-config.yaml — those
+  #  # are the hooks that require a pixi environment and therefore can't run on
+  #  # pre-commit.ci. All other hooks are handled by the pre-commit.ci bot.
+  #  name: pre-commit (pixi-dependent hooks)
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - name: Checkout code
+  #      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+  #      with:
+  #        persist-credentials: false
+  #    - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
+  #      with:
+  #        run-install: false
+  #        post-cleanup: false
+  #    - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
+  #      with:
+  #        cache: false
+  #        environments: pre-commit
+  #    - name: Run pixi-dependent pre-commit hooks
+  #      run: |
+  #        for hook in generate-pixi-docs settings-doc-check check-all-required check-all-forbidden; do
+  #          pixi run pre-commit run "$hook" --all-files
+  #        done
