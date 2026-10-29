@@ -32,13 +32,14 @@ testing = ["diracx-testing", "fakeredis"]
 [project.scripts]
 diracx-tasks = "diracx.tasks.task_run:main"
 
-[project.entry-points."diracx.dbs.sql"]
-TaskDB = "diracx.tasks.plumbing.persistence:TaskDB"
-
 [project.entry-points."diracx.tasks.jobs"]
 CleanSandboxStoreTask = "diracx.tasks.jobs:CleanSandboxStoreTask"
 DummyJobExecutorMonitorTask = "diracx.tasks.jobs:DummyJobExecutorMonitorTask"
 DummyJobExecutorTask = "diracx.tasks.jobs:DummyJobExecutorTask"
+
+[project.entry-points."diracx.tasks.transformation"]
+PackerSweepTask = "diracx.tasks.transformations:PackerSweepTask"
+PackTransformationTask = "diracx.tasks.transformations:PackTransformationTask"
 
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
