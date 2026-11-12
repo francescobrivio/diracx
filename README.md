@@ -3,6 +3,7 @@ test1
 test2
 test3
 test4
+test5
 
 ![DiracX tests](https://github.com/DIRACGrid/diracx/actions/workflows/main.yml/badge.svg?branch=main)
 ![Legacy tests](https://github.com/DIRACGrid/diracx/actions/workflows/integration.yml/badge.svg?branch=main)
