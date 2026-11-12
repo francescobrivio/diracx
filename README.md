@@ -1,3 +1,6 @@
+
+test1
+
 ![DiracX tests](https://github.com/DIRACGrid/diracx/actions/workflows/main.yml/badge.svg?branch=main)
 ![Legacy tests](https://github.com/DIRACGrid/diracx/actions/workflows/integration.yml/badge.svg?branch=main)
 ![DiracX deployment](https://github.com/DIRACGrid/diracx/actions/workflows/deployment.yml/badge.svg?branch=main)
